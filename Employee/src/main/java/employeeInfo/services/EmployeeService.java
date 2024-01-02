@@ -15,34 +15,61 @@ public interface EmployeeService {
 	// Method to get a list of employees
 	List<Employee> getEmployees();
 
+	void deleteEmployee(int id);
+
 }
 
 //Implementation of the EmployeeService interface marked as a service
 @Service
 class EmployeeServiceImpl implements EmployeeService {
 
- // Autowire the EmployeeRepo for data access
- @Autowired
- private EmployeeRepo employeeRepo;
+	// Autowire the EmployeeRepo for data access
+	@Autowired
+	private EmployeeRepo employeeRepo;
 
- // Implementation of the getEmployees method
- @Override
- public List<Employee> getEmployees() {
-     try {
-         // Attempt to fetch the list of employees from the repository
-         List<Employee> employeeList = employeeRepo.findAll();
+	// Implementation of the getEmployees method
+	@Override
+	public List<Employee> getEmployees() {
+		try {
+			// Attempt to fetch the list of employees from the repository
+			List<Employee> employeeList = employeeRepo.findAll();
 
-         // Check if the list is empty and throw an exception if no employees are found
-         if (employeeList.isEmpty()) {
-             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
-         }
+			// Check if the list is empty and throw an exception if no employees are found
+			if (employeeList.isEmpty()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
+			}
 
-         // Return the list of employees if retrieval is successful
-         return employeeList;
-     } catch (Exception ex) {
-         // Catch any exceptions that might occur during the process
-         // Log the error and throw a response status exception with an internal server error status
-         throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving employees", ex);
-     }
- }
+			// Return the list of employees if retrieval is successful
+			return employeeList;
+		} catch (Exception ex) {
+			// Catch any exceptions that might occur during the process
+			// Log the error and throw a response status exception with an internal server
+			// error status
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving employees", ex);
+		}
+	}
+
+//Implementation of the deleteEmployee method
+	@Override
+	public void deleteEmployee(int id) {
+		try {
+			// Attempt to fetch the employee id from the repository
+			var employee = employeeRepo.findById(id);
+
+			// Check if the employeeId is Present
+			if (employee.isPresent()) {
+				// deleting a employee
+				employeeRepo.deleteById(id);
+			} else {
+				// If employee id is not found throwing an exception
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
+			}
+
+		} catch (Exception ex) {
+			// Catch any exceptions that might occur during the process
+			// Log the error and throw a response status exception with an internal server
+			// error status
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Deleting employees", ex);
+		}
+	}
 }
