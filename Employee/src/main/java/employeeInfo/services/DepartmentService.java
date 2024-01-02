@@ -18,6 +18,8 @@ public interface DepartmentService {
 
 	void deleteDepartment(String id);
 
+	List<Department> findDepartmentByManagerId(int id);
+
 }
 
 //Implementation of the DepartmentService interface marked as a service
@@ -51,6 +53,34 @@ class DepartmentServiceImpl implements DepartmentService {
 
 	}
 
+	// Implementation of the getDepartments by managers method
+	@Override
+	public List<Department> findDepartmentByManagerId(int id) {
+
+		try {
+			// Attempt to fetch the list of departments from the repository
+			List<Department> departmentList = departmentRepo.findBymanagerId(id);
+
+			// Check if the list is empty and throw an exception if no departments are found
+			if (!departmentList.isEmpty()) {
+				return departmentList;
+			} else {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No department found");
+			}
+		}
+
+		catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
+		} catch (Exception ex) {
+			// Catch any exceptions that might occur during the process
+			// Log the error and throw a response status exception with an internal server
+			// error status
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+		}
+
+	}
+
 	// Implementation of the deleteDepartment method
 	@Override
 	public void deleteDepartment(String id) {
@@ -67,12 +97,16 @@ class DepartmentServiceImpl implements DepartmentService {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No department found");
 			}
 
+		} catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server
 			// error status
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Deleting department", ex);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 		}
+
 	}
 
 }

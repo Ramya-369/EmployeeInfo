@@ -17,6 +17,9 @@ public interface ManagerService {
 	List<Manager> getManagers();
 
 	void deleteManager(int id);
+
+	// public Manager addNewManager(Manager manager);
+
 }
 
 // Implementation of the ManagerService interface marked as a service
@@ -65,11 +68,25 @@ class ManagerServiceImpl implements ManagerService {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No managers found");
 			}
 
+		} catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server
 			// error status
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting managers", ex);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+		}
 		}
 	}
-}
+
+//	@Override
+//	public Manager addNewManager(Manager manager) {
+//		List<Manager> existingManager = managerRepo.findAll();
+//		if (existingManager.contains(manager)) {
+//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+//					"A manager with the same details already exists.");
+//		}
+//		managerRepo.save(manager);
+//		return manager;
+//	}

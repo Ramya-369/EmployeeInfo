@@ -65,11 +65,14 @@ class EmployeeServiceImpl implements EmployeeService {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
 			}
 
+		} catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server
 			// error status
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error Deleting employees", ex);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 		}
 	}
 }

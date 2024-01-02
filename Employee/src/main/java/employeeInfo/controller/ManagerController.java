@@ -3,12 +3,13 @@ package employeeInfo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import employeeInfo.entities.Manager;
 import employeeInfo.services.ManagerService;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 public class ManagerController {
@@ -42,6 +44,12 @@ public class ManagerController {
 		return managerService.getManagers();
 	}
 
+//	@PostMapping("/addManager")
+//	public Manager addNewManager(@Valid @RequestBody Manager manager) {
+//		return managerService.addNewManager(manager);
+//	}
+
+	
 	@DeleteMapping("/managers/delete/{managerId}") // This endpoint handles DELETE requests for "/api/managers"
 	@Operation(summary = "Delete managers", description = "Deletes managers of giving Id")
 	@ApiResponses(value = {
@@ -56,5 +64,7 @@ public class ManagerController {
 			@Parameter(description = "managerId that is to be deleted", allowEmptyValue = false) @PathVariable("managerId") Integer id) {
 		managerService.deleteManager(id);
 	}
-
+	
+	
+	
 }
