@@ -15,6 +15,10 @@ import employeeInfo.entities.EmployeeRepo;
 public interface EmployeeService {
 	// Method to get a list of Employees
 	List<Employee> getEmployees();
+	
+	public List<Employee> getEmployeesByDepartmentId(String departmentId);
+
+	void deleteEmployee(int id);
 
 	// Method to add the Employees
 	Employee addNewEmployee(Employee employee);
@@ -32,7 +36,11 @@ class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
+
 	// Implementation of the GETEmployees method
+=======
+	// Implementation of the getEmployees method
+
 	@Override
 	public List<Employee> getEmployees() {
 		try {
@@ -70,6 +78,25 @@ class EmployeeServiceImpl implements EmployeeService {
 			employeeRepo.save(employee);
 			// Return the employee details after successful addition
 			return employee;
+=======
+	
+	@Override
+	public List<Employee> getEmployeesByDepartmentId(String departmentId) {
+		// Attempt to fetch the list of employees by departmentId from the repository
+		try {
+			List<Employee> employees = employeeRepo.findByDepartmentId(departmentId);
+
+			// Check if the list is empty and throw an exception if no employees are found
+			if (!employees.isEmpty()) {
+				return employees;
+			} else
+				// If the list is empty, return a 404 response
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found for the department");
+
+		} catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
+
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server
@@ -77,6 +104,7 @@ class EmployeeServiceImpl implements EmployeeService {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 		}
 	}
+
 
 	// Implementation of the putEmployees method
 	@Override
@@ -92,6 +120,27 @@ class EmployeeServiceImpl implements EmployeeService {
 			Employee updatedEmployee = employeeRepo.save(employee);
 			// Return the employee details after successful updation.
 			return updatedEmployee;
+=======
+//Implementation of the deleteEmployee method
+	@Override
+	public void deleteEmployee(int id) {
+		try {
+			// Attempt to fetch the employee id from the repository
+			var employee = employeeRepo.findById(id);
+
+			// Check if the employeeId is Present
+			if (employee.isPresent()) {
+				// deleting a employee
+				employeeRepo.deleteById(id);
+			} else {
+				// If employee id is not found throwing an exception
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
+			}
+
+		} catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
+
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server

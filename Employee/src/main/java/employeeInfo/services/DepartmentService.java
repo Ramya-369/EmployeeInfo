@@ -18,11 +18,17 @@ public interface DepartmentService {
 	// Method to get a list of departments
 	List<Department> getDepartments();
 
+
 	// Method to add the Departments
 	Department addNewDepartment(Department department);
 
 	// Method to update the Departments
 	Department updateDepartment(String departmentId, Department department);
+=======
+	void deleteDepartment(String id);
+
+	List<Department> findDepartmentByManagerId(int id);
+
 
 }
 
@@ -73,13 +79,65 @@ class DepartmentServiceImpl implements DepartmentService {
 			departmentRepo.save(department);
 			// Return the department details after successful addition.
 			return department;
+=======
+	// Implementation of the getDepartments by managers method
+	@Override
+	public List<Department> findDepartmentByManagerId(int id) {
+
+		try {
+			// Attempt to fetch the list of departments from the repository
+			List<Department> departmentList = departmentRepo.findBymanagerId(id);
+
+			// Check if the list is empty and throw an exception if no departments are found
+			if (!departmentList.isEmpty()) {
+				return departmentList;
+			} else {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No department found");
+			}
+		}
+
+		catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
+
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server
 			// error status
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 		}
+
 	}
+=======
+
+	}
+
+	// Implementation of the deleteDepartment method
+	@Override
+	public void deleteDepartment(String id) {
+		try {
+			// Attempt to fetch the department id from the repository
+			var department = departmentRepo.findById(id);
+
+			// Check if the departmentId is Present
+			if (department.isPresent()) {
+				// deleting a department
+				departmentRepo.deleteById(id);
+			} else {
+				// If department id is not found throwing an exception
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No department found");
+			}
+
+		} catch (ResponseStatusException ex) {
+			// throw response status error
+			throw ex;
+		} catch (Exception ex) {
+			// Catch any exceptions that might occur during the process
+			// Log the error and throw a response status exception with an internal server
+			// error status
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+		}
+
 
 	// Implementation of the PutDepartments method
 	@Override
