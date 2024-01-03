@@ -6,14 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import employeeInfo.entities.Department;
 import employeeInfo.services.DepartmentService;
 import io.swagger.v3.oas.annotations.Operation;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import io.swagger.v3.oas.annotations.Parameter;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 public class DepartmentController {
@@ -33,8 +42,10 @@ public class DepartmentController {
 			// 200 OK response indicates successful retrieval of the list of departments
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved the list of departments"),
 
+
 			// 404 NOT FOUND response indicates the list of the department is not present.
 			@ApiResponse(responseCode = "404", description = "department NOT FOUND"),
+
 			// 500 Internal Server Error response indicates an issue on the server side
 			@ApiResponse(responseCode = "500", description = "Internal server error") }) // ApiResponses annotation
 																							// provides information
@@ -44,6 +55,22 @@ public class DepartmentController {
 		return departmentService.getDepartments();
 	}
 
+
+	@PostMapping("/addDepartment") // This endpoint handles POST requests for "/api/departments"
+	@Operation(summary = "Adds a new department", description = "To create and add a new department to the system.") // Operation
+																														// annotation
+																														// provides
+																														// metadata
+																														// for
+																														// the
+																														// Swagger
+																														// documentation
+	@ApiResponses(value = {
+			// 200 OK response indicates successful creation of the department
+			@ApiResponse(responseCode = "201", description = "Department created successfully"),
+			// 400 Bad request Error response indicates an Invalid input data
+			@ApiResponse(responseCode = "400", description = "Bad request. Invalid input data"),
+=======
 	@GetMapping("/departments/{managerId}") // This endpoint handles GET requests for "/api/departments"
 	@Operation(summary = "Get a list of departments by manager Id", description = "Returns a list of all departments of managers Id.") // Operation
 	// annotation
@@ -63,6 +90,42 @@ public class DepartmentController {
 			@ApiResponse(responseCode = "500", description = "Internal server error") }) // ApiResponses annotation
 																							// provides information
 																							// about possible responses
+
+	public Department addNewDepartment(@Valid @RequestBody Department department) {
+		// Call the departmentService to add the departments
+		return departmentService.addNewDepartment(department);
+	}
+
+//	@PutMapping("/updateDepartment/{departmentId}")
+//	 public Department updateDepartment(@PathVariable("departmentId") String departmentId,  @RequestBody Department department) {
+//	        return departmentService.updateDepartment(departmentId, department);
+//	}
+
+	@PutMapping("/updateDepartment/{departmentId}") // This endpoint handles PUT requests for "/api/departments"
+	@Operation(summary = "Updates an existing department", description = "To modify the details of an existing department") // Operation
+																															// annotation
+																															// provides
+																															// metadata
+																															// for
+																															// the
+																															// Swagger
+																															// documentation
+	@ApiResponses(value = {
+			// 200 OK response indicates successful updation of the department
+			@ApiResponse(responseCode = "200", description = "Department updated successfully"),
+			// 400 Bad request Error response indicates an Invalid input data
+			@ApiResponse(responseCode = "400", description = "Bad request. Invalid input data"),
+			// 404 NOT found Error response indicates that Department not found
+			@ApiResponse(responseCode = "404", description = "Department not found"),
+			// 500 Internal Server Error response indicates an issue on the server side
+			@ApiResponse(responseCode = "500", description = "Internal server error") }) // ApiResponses annotation
+																							// provides information
+																							// about possible responses
+	public Department updateDepartment(@PathVariable("departmentId") String departmentId,
+			@Valid @RequestBody Department department) {
+		// Call the departmentService to update the department
+		return departmentService.updateDepartment(departmentId, department);
+=======
 	public List<Department> findDepartmentByManagerId(@PathVariable("managerId") Integer id) {
 		// Call the departmentService to get the list of departments
 		return departmentService.findDepartmentByManagerId(id);
@@ -81,6 +144,7 @@ public class DepartmentController {
 	public void deleteDepartment(
 			@Parameter(description = "Department Id that is to be deleted", allowEmptyValue = false) @PathVariable("departmentId") String id) {
 		departmentService.deleteDepartment(id);
+
 	}
 
 }
