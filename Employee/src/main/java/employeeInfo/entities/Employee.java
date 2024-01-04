@@ -20,41 +20,43 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "Employees")
 public class Employee {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Employeeid")
-    private int employeeId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Employeeid")
+	private int employeeId;
 
-    @NotBlank(message="First Name cannot be blank")
-    @Column(name = "Firstname")
-    private String firstName;
+	@NotBlank(message = "First Name cannot be blank")
+	@Column(name = "Firstname")
+	private String firstName;
 
-    @NotBlank(message="Last Name cannot be blank")
-    @Column(name = "Lastname")
-    private String lastName;
+	@NotBlank(message = "Last Name cannot be blank")
+	@Column(name = "Lastname")
+	private String lastName;
 
-    @NotBlank(message="Gender cannot be blank")
-    @Column(name = "Gender")
-    private String gender;
+	@NotBlank(message = "Gender cannot be blank")
+	@Column(name = "Gender")
+	private String gender;
 
-    @Email(message="Invalid email format")
-    @Column(name = "Email")
-    private String email;
+	@NotBlank(message = "Address cannot be blank")
+	@Column(name = "Address")
+	private String address;
 
+	@Email(message = "Invalid email format")
+	@Column(name = "Email")
+	private String email;
 
-    @Column(name = "Phoneno")
-    private int phoneNo;
+	@Column(name = "Phoneno")
+	private int phoneNo;
 
-    @NotBlank(message="Department Id cannot be blank")
-    @Column(name = "Departmentid")
-    private String departmentId;
+	@NotBlank(message = "Department Id cannot be blank")
+	@Column(name = "Departmentid")
+	private String departmentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "Departmentid", insertable = false, updatable = false)
-    private Department department;
-    
-   
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinColumn(name = "Departmentid", insertable = false, updatable = false)
+	private Department department;
+
 	public int getEmployeeId() {
 		return employeeId;
 	}
@@ -85,6 +87,14 @@ public class Employee {
 
 	public void setGender(String gender) {
 		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getEmail() {
@@ -122,8 +132,8 @@ public class Employee {
 	@Override
 	public String toString() {
 		return "Employee [employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", gender=" + gender + ", email=" + email + ", phoneNo=" + phoneNo + ", departmentId=" + departmentId
-				+ ", department=" + department + "]";
+				+ ", gender=" + gender + ", address=" + address + ", email=" + email + ", phoneNo=" + phoneNo
+				+ ", departmentId=" + departmentId + ", department=" + department + "]";
 	}
 
 	@Override
@@ -143,7 +153,5 @@ public class Employee {
 		return Objects.equals(firstName, other.firstName) && Objects.equals(lastName, other.lastName)
 				&& phoneNo == other.phoneNo;
 	}
-
-    
 
 }
