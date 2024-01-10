@@ -5,47 +5,50 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
-
+import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "Departments")
 public class Department {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "Departmentid")
-	private String departmentId;
+    @Id
+    @Column(name = "DepartmentID")
+    private String departmentId;
 
-	@NotBlank(message = "Department name cannot be blank")
-	@Size(min = 2, max = 20, message = "Department name must be between 2 and 30 characters")
-	@Column(name = "Departmentname")
-	private String departmentName;
+    @NotBlank(message="Department name cannot be null")
+    @Column(name = "Departmentname")
+    private String departmentName;
 
-	@Positive(message = "Manager ID must be a positive integer")
-	@Column(name = "Managerid")
-	private int managerId;
+    @NotNull(message="manager id cannot be null")
+    @Column(name = "Managerid")
+    private int managerId;
+    
+    
+
+    public Department(String departmentId, @NotBlank(message = "Department name cannot be null") String departmentName,
+			@NotNull(message = "manager id cannot be null") int managerId) {
+		super();
+		this.departmentId = departmentId;
+		this.departmentName = departmentName;
+		this.managerId = managerId;
+	}
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
-	private List<Employee> employees;
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    private List<Employee> employees;
 
-	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Managerid", referencedColumnName = "Managerid", insertable = false, updatable = false)
-	private Manager manager;
+    @JsonIgnore
+    @OneToOne( fetch = FetchType.LAZY)
+    @JoinColumn(name = "Managerid", referencedColumnName = "Managerid", insertable = false, updatable = false)
+    private Manager manager;
 
 	public String getDepartmentId() {
 		return departmentId;
@@ -110,4 +113,5 @@ public class Department {
 		return Objects.equals(departmentId, other.departmentId) && Objects.equals(departmentName, other.departmentName);
 	}
 
+    
 }

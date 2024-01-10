@@ -15,30 +15,29 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "Managers")
 public class Manager {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "Managerid")
-	private int managerId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Managerid")
+    private int managerId;
 
-	@NotBlank(message = "Manager name cannot be blank")
-	@Size(min = 2, max = 30, message = "Manager name must be between 2 and 30 characters")
-	@Column(name = "Managername")
-	private String managerName;
+    @NotBlank(message="manager name cannot be blank")
+    @Column(name = "Managername")
+    private String managerName;
 
-	@NotBlank(message = "Email cannot be blank")
-	@Email(message = "Invalid email format")
-	@Column(name = "Email")
-	private String email;
+    @Email(message="Invalid email format")
+    @Column(name = "Email")
+    private String email;
 
-	@JsonIgnore
-	@OneToOne(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Department department;
+    @JsonIgnore
+    @OneToOne(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Department department;
+
+    
 
 	public int getManagerId() {
 		return managerId;
@@ -95,4 +94,5 @@ public class Manager {
 		return Objects.equals(email, other.email) && Objects.equals(managerName, other.managerName);
 	}
 
+    
 }

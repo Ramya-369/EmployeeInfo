@@ -1,8 +1,11 @@
 package employeeInfo.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,72 +13,84 @@ import org.springframework.web.server.ResponseStatusException;
 import employeeInfo.entities.Employee;
 import employeeInfo.entities.EmployeeRepo;
 
-//Define the EmployeeService interface
-public interface EmployeeService {
-	// Method to get a list of employees
-	List<Employee> getEmployees();
-	
-	public List<Employee> getEmployeesByDepartmentId(String departmentId);
-
-	void deleteEmployee(int id);
-
-}
-
-//Implementation of the EmployeeService interface marked as a service
 @Service
-class EmployeeServiceImpl implements EmployeeService {
+@Configuration
+public class EmployeeService implements EmployeeInterface {
 
-	// Autowire the EmployeeRepo for data access
 	@Autowired
 	private EmployeeRepo employeeRepo;
 
-	// Implementation of the getEmployees method
+	public EmployeeService(EmployeeRepo employeeRepo) {
+		super();
+		this.employeeRepo = employeeRepo;
+	}
+
+	public EmployeeService() {
+		super();
+	}
+
+//GetMapping
 	@Override
 	public List<Employee> getEmployees() {
 		try {
-			// Attempt to fetch the list of employees from the repository
 			List<Employee> employeeList = employeeRepo.findAll();
-
-			// Check if the list is empty and throw an exception if no employees are found
 			if (employeeList.isEmpty()) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
 			}
-
-			// Return the list of employees if retrieval is successful
 			return employeeList;
 		} catch (Exception ex) {
-			// Catch any exceptions that might occur during the process
-			// Log the error and throw a response status exception with an internal server
-			// error status
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving employees", ex);
 		}
 	}
-	
+
 	@Override
 	public List<Employee> getEmployeesByDepartmentId(String departmentId) {
 		// Attempt to fetch the list of employees by departmentId from the repository
+
+		List<Employee> employees = employeeRepo.findByDepartmentId(departmentId);
+
+		// Check if the list is empty and throw an exception if no employees are found
+		if (!employees.isEmpty()) {
+			return employees;
+		} else
+			// If the list is empty, return a 404 response
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found for the department");
+
+	}
+
+//PostMapping
+	@Override
+	public Employee addNewEmployee(Employee employee) {
 		try {
-			List<Employee> employees = employeeRepo.findByDepartmentId(departmentId);
-
-			// Check if the list is empty and throw an exception if no employees are found
-			if (!employees.isEmpty()) {
-				return employees;
-			} else
-				// If the list is empty, return a 404 response
-				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found for the department");
-
-		} catch (ResponseStatusException ex) {
-			// throw response status error
-			throw ex;
+			List<Employee> existingemployee = employeeRepo.findAll();
+			if (existingemployee.contains(employee)) {
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+						"A employee with the same details already exists.");
+			}
+			employeeRepo.save(employee);
+			return employee;
 		} catch (Exception ex) {
-			// Catch any exceptions that might occur during the process
-			// Log the error and throw a response status exception with an internal server
-			// error status
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving employees", ex);
+		}
+	}
+
+//PutMapping
+	@Override
+	public Employee updateEmployee(Integer employeeId, Employee employee) {
+		try {
+			Optional<Employee> optEmployee = employeeRepo.findById(employeeId);
+			if (!optEmployee.isPresent()) {
+				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "EmployeeId Not Found..!");
+			} else {
+				Employee updatedEmployee = employeeRepo.save(employee);
+				return updatedEmployee;
+			}
+		} catch (DataAccessException ex) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 		}
 	}
 
-//Implementation of the deleteEmployee method
+	// Implementation of the deleteEmployee method
 	@Override
 	public void deleteEmployee(int id) {
 		try {
@@ -94,6 +109,7 @@ class EmployeeServiceImpl implements EmployeeService {
 		} catch (ResponseStatusException ex) {
 			// throw response status error
 			throw ex;
+
 		} catch (Exception ex) {
 			// Catch any exceptions that might occur during the process
 			// Log the error and throw a response status exception with an internal server
