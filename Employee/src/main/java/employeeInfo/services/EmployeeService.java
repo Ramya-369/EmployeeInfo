@@ -12,30 +12,27 @@ import org.springframework.web.server.ResponseStatusException;
 import employeeInfo.entities.Employee;
 import employeeInfo.entities.EmployeeRepo;
 
-public interface EmployeeService {
-	List<Employee> getEmployees();
-
-	Employee addNewEmployee(Employee employee);
-
-	Employee updateEmployee(Integer employeeId, Employee employee);
-
-	List<Employee> getEmployeesByDepartmentId(String departmentId);
-
-	void deleteEmployee(int id);
-
-}
-
 @Service
-class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeService implements EmployeeInterface {
 
 	@Autowired
 	private EmployeeRepo employeeRepo;
+
+	public EmployeeService(EmployeeRepo employeeRepo) {
+		super();
+		this.employeeRepo = employeeRepo;
+	}
+
+	public EmployeeService() {
+		super();
+	}
 
 //GetMapping
 	@Override
 	public List<Employee> getEmployees() {
 		try {
 			List<Employee> employeeList = employeeRepo.findAll();
+			//System.out.println(employeeList);
 			if (employeeList.isEmpty()) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
 			}

@@ -12,23 +12,16 @@ import org.springframework.web.server.ResponseStatusException;
 import employeeInfo.entities.Manager;
 import employeeInfo.entities.ManagerRepo;
 
-public interface ManagerService {
-
-	List<Manager> getManagers();
-
-	Manager addNewManager(Manager manager);
-
-	Manager updateManager(Integer managerId, Manager manager);
-
-	void deleteManager(int id);
-
-}
-
 @Service
-class ManagerServiceImpl implements ManagerService {
+public class ManagerService implements ManagerInterface {
 
 	@Autowired
 	private ManagerRepo managerRepo;
+
+	public ManagerService(ManagerRepo managerRepo) {
+		super();
+		this.managerRepo = managerRepo;
+	}
 
 //GetMapping
 	@Override

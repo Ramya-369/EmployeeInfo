@@ -24,6 +24,7 @@ public class DepartmentController {
 
 	@Autowired
 	private DepartmentService departmentService;
+	
 
 	@GetMapping("/departments") // This endpoint handles GET requests for "/api/departments"
 	@Operation(summary = "Get a list of departments", description = "Returns a list of all departments.")
@@ -52,7 +53,7 @@ public class DepartmentController {
 
 			// 500 Internal Server Error response indicates an issue on the server side
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	public List<Department> findDepartmentByManagerId(@PathVariable("managerId") Integer id) {
+	public Department findDepartmentByManagerId(@PathVariable("managerId") Integer id) {
 		// Call the departmentService to get the list of departments
 		return departmentService.findDepartmentByManagerId(id);
 	}

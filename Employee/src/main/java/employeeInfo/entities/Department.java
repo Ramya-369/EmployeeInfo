@@ -20,26 +20,38 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "Departments")
 public class Department {
 
-    @Id
-    @Column(name = "DepartmentID")
-    private String departmentId;
+	@Id
+	@Column(name = "DepartmentID")
+	private String departmentId;
 
-    @NotBlank(message="Department name cannot be null")
-    @Column(name = "Departmentname")
-    private String departmentName;
+	@NotBlank(message = "Department name cannot be null")
+	@Column(name = "Departmentname")
+	private String departmentName;
 
-    @NotNull(message="manager id cannot be null")
-    @Column(name = "Managerid")
-    private int managerId;
+	@NotNull(message = "manager id cannot be null")
+	@Column(name = "Managerid")
+	private int managerId;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
-    private List<Employee> employees;
+	public Department(String departmentId, @NotBlank(message = "Department name cannot be null") String departmentName,
+			@NotNull(message = "manager id cannot be null") int managerId) {
+		super();
+		this.departmentId = departmentId;
+		this.departmentName = departmentName;
+		this.managerId = managerId;
+	}
 
-    @JsonIgnore
-    @OneToOne( fetch = FetchType.LAZY)
-    @JoinColumn(name = "Managerid", referencedColumnName = "Managerid", insertable = false, updatable = false)
-    private Manager manager;
+	public Department() {
+		super();
+	}
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+	private List<Employee> employees;
+
+	@JsonIgnore
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Managerid", referencedColumnName = "Managerid", insertable = false, updatable = false)
+	private Manager manager;
 
 	public String getDepartmentId() {
 		return departmentId;
@@ -104,5 +116,4 @@ public class Department {
 		return Objects.equals(departmentId, other.departmentId) && Objects.equals(departmentName, other.departmentName);
 	}
 
-    
 }

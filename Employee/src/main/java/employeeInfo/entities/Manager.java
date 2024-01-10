@@ -20,24 +20,34 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "Managers")
 public class Manager {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Managerid")
-    private int managerId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "Managerid")
+	private int managerId;
 
-    @NotBlank(message="manager name cannot be blank")
-    @Column(name = "Managername")
-    private String managerName;
+	@NotBlank(message = "manager name cannot be blank")
+	@Column(name = "Managername")
+	private String managerName;
 
-    @Email(message="Invalid email format")
-    @Column(name = "Email")
-    private String email;
+	@Email(message = "Invalid email format")
+	@Column(name = "Email")
+	private String email;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Department department;
+	public Manager(int managerId, @NotBlank(message = "manager name cannot be blank") String managerName,
+			@Email(message = "Invalid email format") String email) {
+		super();
+		this.managerId = managerId;
+		this.managerName = managerName;
+		this.email = email;
+	}
 
-    
+	public Manager() {
+		super();
+	}
+
+	@JsonIgnore
+	@OneToOne(mappedBy = "manager", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private Department department;
 
 	public int getManagerId() {
 		return managerId;
@@ -94,5 +104,4 @@ public class Manager {
 		return Objects.equals(email, other.email) && Objects.equals(managerName, other.managerName);
 	}
 
-    
 }
