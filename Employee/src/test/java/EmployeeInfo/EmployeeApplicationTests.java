@@ -89,8 +89,8 @@ class EmployeeApplicationTests {
 	void testUpdateEmployee() {
 		// Arrange
 		Integer employeeId = 11;
-		Employee existingEmployee = new Employee(employeeId ,"satya", "challapalli", "F", "Tuni", "satya@gmail.com", 123456789,
-				"CSM");
+		Employee existingEmployee = new Employee(employeeId, "satya", "challapalli", "F", "Tuni", "satya@gmail.com",
+				123456789, "CSM");
 		Employee updatedEmployee = new Employee(employeeId, "satya", "ch", "F", "Tuni", "satya@gmail.com", 123456789,
 				"CSM");
 
@@ -100,7 +100,7 @@ class EmployeeApplicationTests {
 
 		// Act
 		Employee result = employeeService.updateEmployee(employeeId, updatedEmployee);
-		//System.out.println(result);
+		// System.out.println(result);
 
 		// Assert
 		assertEquals(updatedEmployee, result);

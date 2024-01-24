@@ -17,12 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import employeeInfo.entities.Employee;
 import employeeInfo.entities.Manager;
 import employeeInfo.entities.ManagerRepo;
 import employeeInfo.services.ManagerService;
 
 @ExtendWith(MockitoExtension.class)
+
 public class ManagerApplicationTests {
 	@Mock
 	private ManagerRepo managerRepo;
