@@ -39,6 +39,20 @@ public class DepartmentService implements DepartmentInterface {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving departments", ex);
 		}
 	}
+	
+	// GetMapping
+	
+		public Optional<Department> findDepartmentsById(String id) {
+			try {
+				Optional<Department> departmentList = departmentRepo.findById(id);
+				if (departmentList.isEmpty()) {
+					throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Departments found");
+				}
+				return departmentList;
+			} catch (Exception ex) {
+				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving departments", ex);
+			}
+		}
 
 	// Implementation of the getDepartments by managers method
 	@Override
@@ -119,5 +133,7 @@ public class DepartmentService implements DepartmentInterface {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 		}
 	}
+
+	
 
 }

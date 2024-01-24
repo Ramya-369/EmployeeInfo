@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import employeeInfo.entities.Employee;
 import employeeInfo.entities.EmployeeRepo;
 
 @Service
-@Configuration
 public class EmployeeService implements EmployeeInterface {
 
 	@Autowired
@@ -34,6 +32,7 @@ public class EmployeeService implements EmployeeInterface {
 	public List<Employee> getEmployees() {
 		try {
 			List<Employee> employeeList = employeeRepo.findAll();
+			//System.out.println(employeeList);
 			if (employeeList.isEmpty()) {
 				throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No employees found");
 			}

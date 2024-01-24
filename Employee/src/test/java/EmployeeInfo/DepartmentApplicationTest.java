@@ -13,7 +13,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,6 +29,7 @@ import employeeInfo.entities.DepartmentRepo;
 import employeeInfo.services.DepartmentService;
 
 @ExtendWith(MockitoExtension.class)
+@TestMethodOrder(OrderAnnotation.class)
 class DepartmentApplicationTest {
 
 	@Mock
@@ -40,6 +44,7 @@ class DepartmentApplicationTest {
 	}
 
 	@Test
+	@Order(1)
 	@Disabled
     void testGetDepartment() {
         
@@ -57,6 +62,7 @@ class DepartmentApplicationTest {
     }
 
 	@Test
+	@Order(2)
 	// @Disabled
 	void testGetDepartmentByManagerId() {
 		Integer managerId = 104;
@@ -72,6 +78,8 @@ class DepartmentApplicationTest {
 	}
 
 	@Test
+	@Order(3)
+
 	@Disabled
 	void testAddNewDepartment() {
 
@@ -90,6 +98,7 @@ class DepartmentApplicationTest {
 	}
 
 	@Test
+	@Order(4)
 	@Disabled
 	void testUpdateDepartment() {
 		// Arrange
@@ -112,6 +121,7 @@ class DepartmentApplicationTest {
 
 //
 	@Test
+	@Order(5)
 	@Disabled
 	void testDeleteDepartment() {
 

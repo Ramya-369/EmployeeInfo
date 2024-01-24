@@ -15,25 +15,24 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 @Entity
 @Table(name = "Departments")
 public class Department {
 
-    @Id
-    @Column(name = "DepartmentID")
-    private String departmentId;
+	@Id
+	@Column(name = "DepartmentID")
+	private String departmentId;
 
-    @NotBlank(message="Department name cannot be null")
-    @Column(name = "Departmentname")
-    private String departmentName;
+	@NotBlank(message = "Department name cannot be null")
+	@Column(name = "Departmentname")
+	private String departmentName;
 
-    @NotNull(message="manager id cannot be null")
-    @Column(name = "Managerid")
-    private int managerId;
-    
-    
+	@NotNull(message = "manager id cannot be null")
+	@Column(name = "Managerid")
+	private int managerId;
 
-    public Department(String departmentId, @NotBlank(message = "Department name cannot be null") String departmentName,
+	public Department(String departmentId, @NotBlank(message = "Department name cannot be null") String departmentName,
 			@NotNull(message = "manager id cannot be null") int managerId) {
 		super();
 		this.departmentId = departmentId;
@@ -41,14 +40,18 @@ public class Department {
 		this.managerId = managerId;
 	}
 
-	@JsonIgnore
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
-    private List<Employee> employees;
+	public Department() {
+		super();
+	}
 
-    @JsonIgnore
-    @OneToOne( fetch = FetchType.LAZY)
-    @JoinColumn(name = "Managerid", referencedColumnName = "Managerid", insertable = false, updatable = false)
-    private Manager manager;
+	@JsonIgnore
+	@OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+	private List<Employee> employees;
+
+	@JsonIgnore
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "Managerid", referencedColumnName = "Managerid", insertable = false, updatable = false)
+	private Manager manager;
 
 	public String getDepartmentId() {
 		return departmentId;
@@ -113,5 +116,4 @@ public class Department {
 		return Objects.equals(departmentId, other.departmentId) && Objects.equals(departmentName, other.departmentName);
 	}
 
-    
 }
